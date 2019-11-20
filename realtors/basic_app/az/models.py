@@ -111,6 +111,8 @@ class Realtor(IDModel):
     mailing_zip = db.Column(db.Integer, nullable=False)
     mailing_state = db.Column(db.String(2), nullable=False)
 
+    broker_id = db.Column(db.Integer, db.ForeignKey("broker.id"))
+
     @classmethod
     def clean_mailing_state(cls, value):
         return cls.clean_state(value)
@@ -118,6 +120,16 @@ class Realtor(IDModel):
     @classmethod
     def clean_mailing_zip(cls, value):
         return cls.clean_zip(value)
+
+    @classmethod
+    def match_to_brokers(cls):
+
+        broker_dict = {broker.lic_number: broker.id for broker in Broker.query.all()}
+        for realtor in cls.query.all():
+            broker_id = broker_dict.get(realtor.employer_lic_number, None)
+            realtor.broker_id = broker_id
+            db.session.add(realtor)
+        db.session.commit()
 
 
 class Broker(IDModel):
@@ -136,6 +148,8 @@ class Broker(IDModel):
     city = db.Column(db.String(50), nullable=False)
     zip = db.Column(db.Integer, nullable=False)
     state = db.Column(db.String(2), nullable=False)
+
+    realtors = db.relationship("Realtor")
 
 
 def get_uniques(brokers, key):

@@ -10,3 +10,4 @@ def cache_brokers():
 @celery.task()
 def cache_realtors():
     Realtor.cache()
+    Realtor.match_to_brokers()
