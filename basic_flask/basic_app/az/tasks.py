@@ -1,7 +1,12 @@
 from basic_app.celery import celery
-from basic_app.az.models import Broker
+from basic_app.az.models import Broker, Realtor
 
 
 @celery.task()
 def cache_brokers():
     Broker.cache()
+
+
+@celery.task()
+def cache_realtors():
+    Realtor.cache()
