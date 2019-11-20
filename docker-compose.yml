@@ -1,0 +1,42 @@
+version: '3.7'
+
+services:
+  db:
+    image: postgres:latest
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_USER=hello_flask
+      - POSTGRES_PASSWORD=hello_flask
+      - POSTGRES_DB=hello_flask_dev
+    ports:
+      - "54322:5432"
+    expose:
+      - "5432"
+
+  redis:
+    image: 'redis:alpine'
+    command: redis-server
+    volumes:
+      - 'redis:/data'
+    ports:
+      - '6379:6379'
+    expose:
+      - '6379'
+
+  web:
+    build: ./basic_flask
+    ports:
+      - "5000:5000"
+    links:
+      - db:db
+    expose:
+      - '5000'
+    depends_on:
+      - redis
+      - db
+    command: ./manage.py runserver --host 0.0.0.0
+
+volumes:
+  postgres_data:
+  redis:
