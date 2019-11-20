@@ -35,7 +35,9 @@ services:
     depends_on:
       - redis
       - db
-    command: ./manage.py runserver --host 0.0.0.0
+    command: >
+      sh -c "./manage.py init_dbi &&
+             ./manage.py runserver --host 0.0.0.0"
 
   worker:
     build: ./basic_flask

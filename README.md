@@ -37,6 +37,11 @@ Or, permform the following from a Python shell.
 Then run `alembic stamp head` to mark migrations as current.
 
 Origin
+
+docker-compose build
+docker-compose up
+
+
 ------
 
 Created in answer to this question on /r/flask and StackOverflow:
