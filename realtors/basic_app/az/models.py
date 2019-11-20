@@ -127,8 +127,8 @@ class Broker(IDModel):
 
     legal_name = db.Column(db.String(100), nullable=True)
 
-    phone = db.Column(db.String(20), nullable=False)  # increase lengths
-    fax = db.Column(db.String(20), nullable=True)  # increase lengths , make nullable
+    phone = db.Column(db.String(20), nullable=False)
+    fax = db.Column(db.String(20), nullable=True)
 
     address1 = db.Column(db.String(75), nullable=False)
     address2 = db.Column(db.String(75), nullable=True)

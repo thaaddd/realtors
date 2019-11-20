@@ -21,7 +21,7 @@ services:
       - '6379'
 
   web:
-    build: ./basic_flask
+    build: ./realtors
     ports:
       - "5000:5000"
     links:
@@ -34,7 +34,7 @@ services:
              ./manage.py runserver --host 0.0.0.0"
 
   worker:
-    build: ./basic_flask
+    build: ./realtors
     links:
       - db:db
       - redis:redis
