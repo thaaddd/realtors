@@ -40,7 +40,7 @@ manager = Manager(create_app)
 
 
 @manager.command
-def init_dbi():
+def init_db():
 
     flask_app = Flask(__name__)
     flask_app.config.from_object(config)

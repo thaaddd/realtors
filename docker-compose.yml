@@ -9,8 +9,6 @@ services:
       - POSTGRES_USER=hello_flask
       - POSTGRES_PASSWORD=hello_flask
       - POSTGRES_DB=hello_flask_dev
-    ports:
-      - "54322:5432"
     expose:
       - "5432"
 
@@ -19,8 +17,6 @@ services:
     command: redis-server
     volumes:
       - 'redis:/data'
-    ports:
-      - '6379:6379'
     expose:
       - '6379'
 
@@ -30,13 +26,11 @@ services:
       - "5000:5000"
     links:
       - db:db
-    expose:
-      - '5000'
     depends_on:
       - redis
       - db
     command: >
-      sh -c "./manage.py init_dbi &&
+      sh -c "./manage.py init_db &&
              ./manage.py runserver --host 0.0.0.0"
 
   worker:

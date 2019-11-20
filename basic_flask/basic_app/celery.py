@@ -25,4 +25,3 @@ flask_app = Flask(__name__)
 flask_app.config.from_object(config)
 db.init_app(flask_app)
 celery = make_celery(flask_app)
-# celery -A basic_app.celery worker -l info
