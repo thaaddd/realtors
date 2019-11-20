@@ -37,6 +37,16 @@ services:
       - db
     command: ./manage.py runserver --host 0.0.0.0
 
+  worker:
+    build: ./basic_flask
+    links:
+      - db:db
+      - redis:redis
+    depends_on:
+      - redis
+      - db
+    command: celery -A basic_app.celery worker -l info
+
 volumes:
   postgres_data:
   redis:
