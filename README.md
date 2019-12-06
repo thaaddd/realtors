@@ -1,50 +1,23 @@
-Basic Flask
-===========
+Basic Flask App
+===============
 
-This sample project shows how I organize a project to use Flask,
-Flask-SQLAlchemy, and Alembic together.  It demonstrates the application
-factory pattern and is organized using blueprints.
+So I forked this from:
+https://github.com/davidism/basic_flask.
 
-Demonstrating migration generation
-----------------------------------
+In his words:
+"This sample project shows how I organize a project to use Flask, Flask-SQLAlchemy, and Alembic together. It demonstrates the application factory pattern and is organized using blueprints."
 
-I used Alembic to autogenerate a migration and then tweaked the results.  If you
-want to see autogeneration in action, just delete
-`alembic/versions/35b593d48d6a_user_models.py`, then run
-`alembic revision --autogenerate -m "user models"`.
+I've just built off of that. I've added Celery for caching (using Redis as the broker) and then I Dockerized it. It's still a work in progress.
 
-Set up the database
--------------------
+To build:
 
-Change `basic_app.config.SQLALCHEMY_DATABASE_URI` to what you want.  By default
-it points to a sqlite file called `app.db` in the project folder.
+Run `docker-compose build` and then `docker-compose up`.
 
-Then run `alembic upgrade head` to set up the database through migrations.
+After, to cache data:
 
-Or, permform the following from a Python shell.
+`curl "localhost:5000/az/brokers/cache"`
+`curl "localhost:5000/az/realtors/cache"`
 
-    In [1]: from basic_app import create_app, db
-    In [2]: create_app().app_context().push()
-    In [3]: db.create_all()
-    from basic_app import create_app, db
-    create_app().app_context().push()
-    db.create_all()
+Example route:
 
-    1140  alembic revision --autogenerate -m "realestate"
-    1142  alembic upgrade head
-
-
-Then run `alembic stamp head` to mark migrations as current.
-
-Origin
-
-docker-compose build
-docker-compose up
-
-
-------
-
-Created in answer to this question on /r/flask and StackOverflow:
-
-* [\[AF\] Has anyone ever gotten Alembic to work with Flask Blueprints? \[SQLAlchemy\]](http://www.reddit.com/r/flask/comments/1h1k5g/af_has_anyone_ever_gotten_alembic_to_work_with/)
-* [Alembic autogenerates empty Flask-SQLAlchemy migrations](http://stackoverflow.com/questions/17201800/alembic-autogenerates-empty-flask-sqlalchemy-migrations)
+`curl "localhost:5000/az/realtors?limit=4&last_name=Fox&order_by=first_name"`
