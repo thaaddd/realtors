@@ -1,6 +1,5 @@
 Flask-Script
 Flask-SQLAlchemy
-alembic
 psycopg2-binary
 psycopg2
 requests

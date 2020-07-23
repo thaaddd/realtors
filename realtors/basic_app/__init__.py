@@ -1,13 +1,12 @@
+from basic_app import config
 from flask import Flask
 from flask_script import Manager
 from flask_sqlalchemy import SQLAlchemy
-from basic_app import config
 
 db = SQLAlchemy()
 
 
 def load_models():
-    from basic_app.auth import models
     from basic_app.az import models
 
 
@@ -19,10 +18,8 @@ def init_extensions(app):
 
 
 def init_views(app):
-    from basic_app import auth
     from basic_app import az
 
-    app.register_blueprint(auth.bp, url_prefix="/auth")
     app.register_blueprint(az.bp, url_prefix="/az")
 
 
@@ -46,5 +43,4 @@ def init_db():
     flask_app.config.from_object(config)
     db.init_app(flask_app)
 
-    # manager.app.app_context().push()
     db.create_all()

@@ -3,20 +3,19 @@ version:         '3.7'
 services:
   db:
     image:       postgres:latest
-    # volumes:
-    #   - postgres_data:/var/lib/postgresql/data/
     environment:
-      - POSTGRES_USER=hello_flask
-      - POSTGRES_PASSWORD=hello_flask
-      - POSTGRES_DB=hello_flask_dev
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=realtors
     expose:
       - "5432"
+    restart: always
+    volumes:
+      - ${REALTORS_PATH}/realtors:/var/lib/postgresql/data
 
   redis:
     image:       'redis:alpine'
     command:     redis-server
-    # volumes:
-    #   - 'redis:/data'
     expose:
       - '6379'
 
@@ -29,9 +28,14 @@ services:
     depends_on:
       - redis
       - db
+    environment:
+      - SQLALCHEMY_DATABASE_URI=postgres://postgres:postgres@db:5432/realtors
+    restart: always
     command:     >
       sh -c "./manage.py init_db &&
              ./manage.py runserver --host 0.0.0.0"
+    volumes:
+      - '.:/realtors'
 
   worker:
     build:       ./realtors
@@ -42,7 +46,5 @@ services:
       - redis
       - db
     command:     celery -A basic_app.celery worker -l info
-
-# volumes:
-#   postgres_data:
-#   redis:
+    environment:
+      - SQLALCHEMY_DATABASE_URI=postgres://postgres:postgres@db:5432/realtors

@@ -1,7 +1,13 @@
+import os
+
 DEBUG = True
 SECRET_KEY = "dev"
 
-SQLALCHEMY_DATABASE_URI = "postgres://hello_flask:hello_flask@db:5432/hello_flask_dev"
+
+SQLALCHEMY_DATABASE_URI = os.environ.get(
+    "SQLALCHEMY_DATABASE_URI",
+    "postgresql+psycopg2://postgres:postgres@localhost:5432/realtors",
+)
 
 
 CELERY_RESULT_BACKEND = "redis://redis:6379/0"
